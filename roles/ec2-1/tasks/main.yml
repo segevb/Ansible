@@ -1,0 +1,39 @@
+- name: Check If Python and Docker Are Installed
+  apt:
+    name:
+       - python3-pip
+       - docker.io
+    state: present
+    update_cache: yes
+  become: yes
+
+  - name: make sure docker-py installed
+  become: yes
+  pip:
+    name: docker-py
+
+- name: Start Docker Service
+  become: yes
+  service:
+    name: docker
+    state: started
+
+- name: Clone Git Repository
+  git:
+    repo: https://segevb:{{ git_pass }}@github.com/segevb/weather.git
+    dest: /
+
+- name: Log into DockerHub
+    username: "{{ dockerhub_user }}"
+    password: "{{ dockerhub_pass }}"
+
+- name: Build an image and push to docker hub
+  become: yes
+  docker_image:
+    build:
+      path: ./weather
+    name: weather_app:0.5
+    repository: segevb/weather_app
+    push: yes
+    source: build
+

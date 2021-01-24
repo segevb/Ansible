@@ -1,0 +1,97 @@
+---
+# playbook file for creating EC2 instances
+- name: Deployment Of EC2 instances
+  become: yes
+  hosts: localhost
+#var file created with vault create
+  vars_files:
+    - password.yml
+#install required files for using AWS
+  tasks:
+    - name: Make sure that pip3 is installed
+      apt:
+        - python3-pip
+        state: present
+    - name: Make Sure boto,boto3,docker-py are Installed
+      pip:
+        name:
+          - boto
+          - boto3
+          - docker-py
+        state: present
+# creating 2 EC2 instances
+    - name: Create First Instance
+      ec2:
+        aws_access_key: "{{ec2_access_key}}"
+        aws_secret_key: "{{ec2_secret_key}}"
+        key_name: int2020
+        instance_type: t2.micro
+        image: ami-0a91cd140a1fc148a
+        region: us-east-2
+        wait: yes
+        group: MySecurityGroup
+        count: 1
+        vpc_subnet_id: subnet-3c074270
+        assign_public_ip: yes
+        instance_tags:
+          Name: First Ansible Instance
+# register ec2 as variable
+      register: ec2
+
+    - name: Create Second Instance
+      ec2:
+        aws_access_key: "{{ec2_access_key}}"
+        aws_secret_key: "{{ec2_secret_key}}"
+        key_name: ansible
+        instance_type: t2.micro
+        image: ami-0a91cd140a1fc148a
+        region: us-east-2
+        wait: yes
+        group: MySecurityGroup
+        count: 1
+        vpc_subnet_id: subnet-d34b319f
+        assign_public_ip: yes
+        instance_tags:
+          Name: Second Ansible Instance
+# register ec21 as variable
+      register: ec21
+# adding instance's public_ip to host file
+    - name: Add first instance to host group
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        groupname: ec2-1
+      loop: "{{ ec2.instances }}"
+
+    - name: Add second instance to host group
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        groupname: ec2-2
+      loop: "{{ ec21.instances }}"
+# connecting to EC2 instances via SSH
+    - name: connecting to first EC2 via SSH
+      wait_for:
+        host: "{{ item.public_dns_name }}"
+        port: 22
+        state: started
+      loop: "{{ ec2.instances }}"
+
+    - name: connecting to second EC2 via SSH
+      wait_for:
+        host: "{{ item.public_dns_name }}"
+        port: 22
+        state: started
+      loop: "{{ ec21.instances }}"
+# Run first role to install docker and build docker image
+- hosts: ec2-1
+  gather_facts: yes
+  tasks:
+  - name: running role
+    include_role:
+      name: ec2-1
+# Run second role to pull docker image
+- hosts: ec2-2
+  gather_facts: yes
+  tasks:
+  - name: running role
+    include_role:
+      name: ec2-2
