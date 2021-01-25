@@ -7,7 +7,7 @@
     update_cache: yes
   become: yes
 
-  - name: make sure docker-py installed
+- name: make sure docker-py installed
   become: yes
   pip:
     name: docker-py
@@ -24,8 +24,8 @@
     dest: /
 
 - name: Log into DockerHub
-    username: "{{ dockerhub_user }}"
-    password: "{{ dockerhub_pass }}"
+  username: "{{ dockerhub_user }}"
+  password: "{{ dockerhub_pass }}"
 
 - name: Build an image and push to docker hub
   become: yes

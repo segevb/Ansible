@@ -8,10 +8,6 @@
     - password.yml
 #install required files for using AWS
   tasks:
-    - name: Make sure that pip3 is installed
-      apt:
-        - python3-pip
-        state: present
     - name: Make Sure boto,boto3,docker-py are Installed
       pip:
         name:
