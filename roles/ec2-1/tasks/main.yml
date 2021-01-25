@@ -24,8 +24,11 @@
     dest: /
 
 - name: Log into DockerHub
-  username: "{{ dockerhub_user }}"
-  password: "{{ dockerhub_pass }}"
+  become: yes
+  docker_login:
+    username: "{{ dockerhub_user }}"
+    password: "{{ dockerhub_pass }}"
+    api_version: auto
 
 - name: Build an image and push to docker hub
   become: yes
