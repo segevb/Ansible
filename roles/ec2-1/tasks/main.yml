@@ -1,3 +1,12 @@
+---
+# tasks file for ec2-1
+- name: Add the user 'docker', appending the group 'users' to the user's groups
+  user:
+    name: docker
+    groups: users
+    append: yes
+  become: yes
+
 - name: Check If Python and Docker Are Installed
   apt:
     name:
@@ -20,8 +29,8 @@
 
 - name: Clone Git Repository
   git:
-    repo: https://segevb:{{ git_pass }}@github.com/segevb/weather.git
-    dest: /
+    repo: https://github.com/segevb/weather.git
+    dest: /home/ubuntu/weather
 
 - name: Log into DockerHub
   become: yes
@@ -34,7 +43,7 @@
   become: yes
   docker_image:
     build:
-      path: ./weather
+      path: /home/ubuntu/weather
     name: weather_app:0.5
     repository: segevb/weather_app
     push: yes
