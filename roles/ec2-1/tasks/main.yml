@@ -30,8 +30,7 @@
 - name: Clone Git Repository
   git:
     repo: https://github.com/segevb/weather.git
-    dest: /home/ubuntu/
-    clone: yes
+    dest: /home/ubuntu/weather
 
 - name: Log into DockerHub
   become: yes
