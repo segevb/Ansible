@@ -1,7 +1,4 @@
 ---
-#var file created with vault create
-  vars_files:
-    - password.yml
 # tasks file for ec2-1
 - name: Add the user 'docker', appending the group 'users' to the user's groups
   user:

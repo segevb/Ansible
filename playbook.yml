@@ -1,4 +1,10 @@
 ---
+- name: Pass variables to role
+  include_role:
+    name: myrole
+  vars:
+    rolevar1: value from task
+
 # playbook file for creating EC2 instances
 - name: Deployment Of EC2 instances
   become: yes
@@ -95,9 +101,11 @@
 - hosts: ec2-1
   gather_facts: yes
   tasks:
-  - name: running role
+  - name: running role & Pass variables to role
     include_role:
       name: ec2-1
+    vars:
+      rolevar1: password.yml
 # Run second role to pull docker image
 - hosts: ec2-2
   gather_facts: yes
