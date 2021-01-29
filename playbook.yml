@@ -1,5 +1,4 @@
 ---
-
 # playbook file for creating EC2 instances
 - name: Deployment Of EC2 instances
   become: yes
@@ -100,7 +99,9 @@
     include_role:
       name: ec2-1
     vars:
-      rolevar1: password.yml
+      dockerhub_user: "{{ dockerhub_user }}"
+      dockerhub_pass: "{{ dockerhub_pass }}"
+
 # Run second role to pull docker image
 - hosts: ec2-2
   gather_facts: yes
