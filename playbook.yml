@@ -1,9 +1,4 @@
 ---
-- name: Pass variables to role
-  include_role:
-    name: myrole
-  vars:
-    rolevar1: value from task
 
 # playbook file for creating EC2 instances
 - name: Deployment Of EC2 instances
