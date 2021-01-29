@@ -68,12 +68,14 @@
       add_host:
         hostname: "{{ item.public_ip }}"
         groupname: ec2-1
+        insertafter: "[instances]"
       loop: "{{ ec2.instances }}"
 
     - name: Add second instance to host group
       add_host:
         hostname: "{{ item.public_ip }}"
         groupname: ec2-2
+        insertafter: "[instances]"
       loop: "{{ ec21.instances }}"
 # connecting to EC2 instances via SSH
     - name: connecting to first EC2 via SSH
