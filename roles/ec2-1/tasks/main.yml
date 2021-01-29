@@ -1,4 +1,7 @@
 ---
+#var file created with vault create
+  vars_files:
+    - password.yml
 # tasks file for ec2-1
 - name: Add the user 'docker', appending the group 'users' to the user's groups
   user:
@@ -7,9 +10,9 @@
     append: yes
   become: yes
 
-- name: Check If Python and Docker Are Installed
+- name: Install Python and Docker
   apt:
-    name:
+    name: 
        - python3-pip
        - docker.io
     state: present
