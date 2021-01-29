@@ -43,7 +43,7 @@
   become: yes
   docker_image:
     build:
-      path: /home/ubuntu/gitProject/weather
+      path: /home/ubuntu/gitProject/
     name: weather_app:0.5
     repository: segevb/weather_app
     push: yes
