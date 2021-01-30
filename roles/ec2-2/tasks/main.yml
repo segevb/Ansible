@@ -23,7 +23,7 @@
 - name: pull a Docker Image
   become: yes
   docker_image:
-    name: segevb/weather_app:v0.5
+    name: segevb/weather_app
 
 
 
